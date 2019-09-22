@@ -1,0 +1,395 @@
+# Linked Lists
++ [Reorder List](#reorder-list)
++ [Linked List Cycle II](#linked-list-cycle-ii)
++ [Linked List Cycle](#linked-list-cycle)
++ [Merge Two Sorted Lists](#merge-two-sorted-lists)
++ [Remove Nth Node From End of List](#remove-nth-node-from-end-of-list)
++ [Middle of the Linked List](#middle-of-the-linked-list)
++ [Delete Node in a Linked List](#delete-node-in-a-linked-list)
++ [Palindrome Linked List](#palindrome-linked-list)
++ [Reverse Linked List](#reverse-linked-list)
++ [Remove Linked List Elements](#remove-linked-list-elements)
++ [Intersection of Two Linked Lists](#intersection-of-two-linked-lists)
+
+##  Reorder List
+https://leetcode.com/problems/reorder-list/
+
+```C++
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head){
+        if (!head || !head->next)
+            return head;
+        ListNode* prev = NULL;
+        ListNode* help = head;
+        while (help){
+            head = help;
+            help = head->next;
+            head->next = prev;
+            prev = head;
+        }
+        return head;
+    }
+    void reorderList(ListNode* head) {
+        if (!head || !head->next || !head->next->next)
+            return;
+        unsigned size = 0;
+        ListNode* tmp = head, *help;
+        for(size; tmp!= NULL; size++) {
+            tmp = tmp->next;
+        }
+        tmp = head;
+        for (unsigned i = 0; i < (size - 1) / 2; i++){
+            tmp = tmp->next;
+        }
+        ListNode* second = tmp->next;
+        tmp->next = NULL;
+        second = reverseList(second);
+        tmp = head;
+        while (second && tmp){
+            help = tmp->next;
+            tmp->next = second;
+            second = second->next;
+            tmp = tmp->next;
+            tmp->next = help;
+            tmp = tmp->next;
+        }
+    }
+};
+
+## Linked List Cycle II
+https://leetcode.com/problems/linked-list-cycle-ii/
+
+```C++
+class Solution {
+public:
+     ListNode * hasCycle(ListNode *head) {
+        ListNode* turtle = head;
+        ListNode* bunny = head;
+        bool tur = false;
+        while (bunny->next){
+            bunny = bunny->next;
+            if (tur) 
+                turtle = turtle->next;
+            if (bunny->next == turtle->next)
+                return bunny;
+            tur = !tur;
+        }
+        return NULL;
+    }
+    ListNode *detectCycle(ListNode *head) {
+        if (!head)
+            return NULL;
+        ListNode* met = this->hasCycle(head);
+        if (met == NULL)
+            return met;
+        while (1){
+            met = met->next;
+            if (head == met)
+                return head;
+            head = head->next;
+        }
+    }
+};
+
+## Linked List Cycle
+https://leetcode.com/problems/linked-list-cycle/
+
+```C++
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        if (!head)
+            return false;
+        ListNode* turtle = head;
+        ListNode* bunny = head;
+        bool tur = false;
+        while (bunny->next){
+            bunny = bunny->next;
+            if (tur) 
+                turtle = turtle->next;
+            if (bunny->next == turtle->next)
+                return true;
+            tur = !tur;
+        }
+        return false;
+    }
+};
+
+## Merge Two Sorted Lists
+https://leetcode.com/problems/merge-two-sorted-lists/
+
+```C++
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if (!l1){
+            return l2;
+        }
+        if(!l2){
+            return l1;
+        }
+        ListNode* head = NULL;
+        if (l1->val > l2->val){
+            head = l2;
+            l2 = l2->next;
+        }
+        else {
+            head = l1;
+            l1 = l1->next;
+        }
+        ListNode* tmp = head;
+        while (l1 && l2){
+            if (l1->val > l2->val){
+                tmp->next = l2;
+                l2 = l2->next;
+            }
+            else{
+                tmp->next = l1;
+                l1 = l1->next;
+            }
+            tmp = tmp->next;
+        }
+        if (l1){
+            tmp->next = l1;
+            return head;
+        }
+        else{
+            tmp->next = l2;
+            return head;
+        }
+    }
+};
+
+## Remove Nth Node From End of List
+https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+
+```C++
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* N = head;;
+        ListNode* tmp = head;
+        for (unsigned i = 0; i < (n - 1); i++){
+            tmp = tmp->next;
+        }
+        ListNode* prev = NULL;
+        while(tmp->next){
+            prev = N;
+            N = N->next;
+            tmp = tmp->next;
+        }
+        if (N == head){
+            return N->next;
+        }
+        prev->next  = prev->next->next;
+        return head;
+    }
+};
+
+## Middle of the Linked List
+https://leetcode.com/problems/middle-of-the-linked-list/
+
+```C++
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        unsigned size = 0;
+        ListNode* tmp = head;
+        for(size; tmp!= NULL; size++) {
+            tmp = tmp->next;
+        }
+        unsigned half = size / 2;
+        tmp = head;
+        for (unsigned i = 0; i < half; i++){
+            tmp = tmp->next;
+        }
+        return tmp;
+    }
+};
+
+## Delete Node in a Linked List
+https://leetcode.com/problems/delete-node-in-a-linked-list/
+
+```C++
+class Solution {
+public:
+    void deleteNode(ListNode* node) {
+        while(node->next->next) {
+            node->val = node->next->val;
+            node = node->next;
+        }
+        node->val = node->next->val;
+        node->next = NULL;
+    }
+};
+
+## Palindrome Linked List
+https://leetcode.com/problems/palindrome-linked-list/
+
+```C++
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head){
+        if (!head || !head->next)
+            return head;
+        ListNode* prev = NULL;
+        ListNode* help = head;
+        while (help){
+            head = help;
+            help = head->next;
+            head->next = prev;
+            prev = head;
+        }
+        return head;
+    }
+    void reorderList(ListNode* head) {
+        if (!head || !head->next || !head->next->next)
+            return;
+        unsigned size = 0;
+        ListNode* tmp = head, *help;
+        for(size; tmp!= NULL; size++) {
+            tmp = tmp->next;
+        }
+        tmp = head;
+        for (unsigned i = 0; i < (size - 1) / 2; i++){
+            tmp = tmp->next;
+        }
+        ListNode* second = tmp->next;
+        tmp->next = NULL;
+        second = reverseList(second);
+        tmp = head;
+        while (second && tmp){
+            help = tmp->next;
+            tmp->next = second;
+            second = second->next;
+            tmp = tmp->next;
+            tmp->next = help;
+            tmp = tmp->next;
+        }
+    }
+    bool isPalindrome(ListNode* head) {
+        if (!head || !head->next)
+            return true;
+        reorderList(head);
+        ListNode* tmp = head;
+        while (tmp && tmp->next){
+            if (tmp->val != tmp->next->val)
+                return false;
+            tmp = tmp->next->next;
+        }
+        return true;
+    }
+};
+
+## Reverse Linked List
+https://leetcode.com/problems/reverse-linked-list/
+
+```C++
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        //Recursively
+        /*
+        if (!head || !head->next){
+            return head;
+        }
+        if (!head->next->next){
+            ListNode* help = head;
+            head = head->next;
+            head->next = help;
+            head->next->next = NULL;
+            return head;
+        }
+        Solution rez;
+        ListNode* tmp = rez.reverseList(head->next);
+        ListNode* rememberHead = head;
+        head = tmp;
+        ListNode* help = head;
+        while (help->next)
+            help = help->next;
+        help->next = rememberHead;
+        help->next->next = NULL;
+        return head;
+        */
+        
+        //iteratively
+        if (!head || !head->next)
+            return head;
+        ListNode* prev = NULL;
+        ListNode* help = head;
+        while (help){
+            head = help;
+            help = head->next;
+            head->next = prev;
+            prev = head;
+        }
+        return head;
+    }
+};
+
+## Remove Linked List Elements
+https://leetcode.com/problems/remove-linked-list-elements/
+
+```C++
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        if (!head)
+            return NULL;
+        ListNode* tmp = head;
+        ListNode* pretmp = head;
+        while (tmp) {
+            if (tmp->val == val) {
+                if (tmp == head) {
+                    head = head->next;
+                    tmp = head;
+                    pretmp = tmp;
+                    continue;
+                }
+                pretmp->next = tmp->next;
+                tmp = tmp->next;
+                continue;
+            }
+            pretmp = tmp;
+            tmp = tmp->next;
+        }
+        return head;
+    }
+};
+
+## Intersection of Two Linked Lists
+https://leetcode.com/problems/intersection-of-two-linked-lists/
+
+```C++
+#include <cmath>
+class Solution {
+public:
+    
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        ListNode* tmp1 = headA->next;
+        ListNode* tmp2 = headB->next;
+        unsigned sizeA = 0, sizeB = 0;
+        for(sizeA; tmp1!= NULL; sizeA++) {
+            tmp1 = tmp1->next;
+        }
+        for(sizeB; tmp2!= NULL; sizeB++) {
+            tmp2 = tmp2->next;
+        }
+        if (sizeA > sizeB) {
+            tmp1 = headA->next + (sizeA - sizeB);
+        } else {
+            tmp2 = headB->next + (sizeB - sizeA);
+        }
+        while(tmp1 != tmp2 && tmp1 != NULL) {
+            tmp1 = tmp1->next;
+            tmp2 = tmp2->next;
+        }
+        if (tmp1 == NULL) {
+            return NULL;
+        }
+        else {
+            return tmp1;
+        }
+    }
+};
