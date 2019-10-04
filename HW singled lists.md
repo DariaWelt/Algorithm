@@ -10,6 +10,7 @@
 + [Reverse Linked List](#reverse-linked-list)
 + [Remove Linked List Elements](#remove-linked-list-elements)
 + [Intersection of Two Linked Lists](#intersection-of-two-linked-lists)
++ [Merge Sort List](#merge-sort-list)
 
 ##  Reorder List
 https://leetcode.com/problems/reorder-list/
@@ -400,6 +401,71 @@ public:
         }
         else {
             return tmp1;
+        }
+    }
+};
+```
+
+##Merge Sort List
+https://leetcode.com/problems/sort-list/submissions/
+
+```C++
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if (!l1){
+            return l2;
+        }
+        if(!l2){
+            return l1;
+        }
+        ListNode* head = NULL;
+        if (l1->val > l2->val){
+            head = l2;
+            l2 = l2->next;
+        }
+        else {
+            head = l1;
+            l1 = l1->next;
+        }
+        ListNode* tmp = head;
+        while (l1 && l2){
+            if (l1->val > l2->val){
+                tmp->next = l2;
+                l2 = l2->next;
+            }
+            else{
+                tmp->next = l1;
+                l1 = l1->next;
+            }
+            tmp = tmp->next;
+        }
+        if (l1){
+            tmp->next = l1;
+            return head;
+        }
+        else{
+            tmp->next = l2;
+            return head;
+        }
+    }
+    ListNode* sortList(ListNode* head) {
+        if(!head)
+            return NULL;
+        if (!head->next)
+            return head;
+        else {
+            ListNode* tmp = head;
+            unsigned size = 0;
+            for(size; tmp; tmp = tmp->next, ++size);
+            tmp = head;
+            for(unsigned i = 0; i < (size / 2) - 1; ++i, tmp = tmp->next);
+            ListNode* first = tmp->next;
+            tmp->next = NULL;
+            head = this->sortList(head);
+            first = this->sortList(first);
+            head = this->mergeTwoLists(head, first);
+            return head;
         }
     }
 };
