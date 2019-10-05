@@ -406,7 +406,7 @@ public:
 };
 ```
 
-##Merge Sort List
+## Merge Sort List
 https://leetcode.com/problems/sort-list/submissions/
 
 ```C++
