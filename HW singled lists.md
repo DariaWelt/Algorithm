@@ -378,29 +378,34 @@ class Solution {
 public:
     
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        ListNode* tmp1 = headA->next;
-        ListNode* tmp2 = headB->next;
+        if (headA == NULL || headB == NULL)
+          return NULL;
+        ListNode* tmp1 = headA;
+        ListNode* tmp2 = headB;
         unsigned sizeA = 0, sizeB = 0;
-        for(sizeA; tmp1!= NULL; sizeA++) {
-            tmp1 = tmp1->next;
+        for (sizeA; tmp1; sizeA++) {
+          tmp1 = tmp1->next;
         }
-        for(sizeB; tmp2!= NULL; sizeB++) {
-            tmp2 = tmp2->next;
+        for (sizeB; tmp2; sizeB++) {
+          tmp2 = tmp2->next;
         }
+        tmp2 = headB;
+        tmp1 = headA;
         if (sizeA > sizeB) {
-            tmp1 = headA->next + (sizeA - sizeB);
-        } else {
-            tmp2 = headB->next + (sizeB - sizeA);
+          for (unsigned i = 0; i < sizeA - sizeB; tmp1 = tmp1->next, ++i) {};
         }
-        while(tmp1 != tmp2 && tmp1 != NULL) {
-            tmp1 = tmp1->next;
-            tmp2 = tmp2->next;
+        else if (sizeB > sizeA) {
+          for (unsigned i = 0; i < sizeB - sizeA; tmp2 = tmp2->next, ++i);
+        }
+        while (tmp1 != tmp2 && tmp1 != NULL) {
+          tmp1 = tmp1->next;
+          tmp2 = tmp2->next;
         }
         if (tmp1 == NULL) {
-            return NULL;
+          return NULL;
         }
         else {
-            return tmp1;
+          return tmp1;
         }
     }
 };
