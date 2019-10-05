@@ -1,5 +1,5 @@
 # Math
-+ [Fibonacci Number] (#fibonacci-number)
++ [Fibonacci Numbe(#fibonacci-number)
 
 ## Fibonacci Number
 https://leetcode.com/problems/fibonacci-number/
