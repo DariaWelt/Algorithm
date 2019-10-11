@@ -66,31 +66,30 @@ https://leetcode.com/problems/linked-list-cycle-ii/
 class Solution {
 public:
      ListNode * hasCycle(ListNode *head) {
-        ListNode* turtle = head;
-        ListNode* bunny = head;
-        bool tur = false;
-        while (bunny->next){
-            bunny = bunny->next;
-            if (tur) 
-                turtle = turtle->next;
-            if (bunny->next == turtle->next)
-                return bunny;
-            tur = !tur;
+        ListNode* slow = head;
+        ListNode* fast = head;
+        if (!head || !head->next)
+            return NULL;
+        while (fast->next && fast->next->next){
+            fast = fast->next->next;
+            slow = slow->next;
+            if (fast->next == slow->next)
+                return fast;
         }
         return NULL;
     }
     ListNode *detectCycle(ListNode *head) {
         if (!head)
             return NULL;
-        ListNode* met = this->hasCycle(head);
-        if (met == NULL)
-            return met;
-        while (1){
-            met = met->next;
-            if (head == met)
-                return head;
-            head = head->next;
+        ListNode* headtmp = head;
+        ListNode* meet = this->hasCycle(head);
+        if (!meet)
+            return NULL;
+        while (headtmp != meet){
+            meet = meet->next;
+            headtmp = headtmp->next;
         }
+        return headtmp;
     }
 };
 ```
@@ -102,18 +101,15 @@ https://leetcode.com/problems/linked-list-cycle/
 class Solution {
 public:
     bool hasCycle(ListNode *head) {
-        if (!head)
-            return false;
-        ListNode* turtle = head;
-        ListNode* bunny = head;
-        bool tur = false;
-        while (bunny->next){
-            bunny = bunny->next;
-            if (tur) 
-                turtle = turtle->next;
-            if (bunny->next == turtle->next)
+        if (!head || !head->next)
+            return false;       
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while (fast->next && fast->next->next){
+            fast = fast->next->next;
+            slow = slow->next;
+            if (fast->next == slow->next)
                 return true;
-            tur = !tur;
         }
         return false;
     }
