@@ -196,7 +196,7 @@ public:
 
 ## Middle of the Linked List
 https://leetcode.com/problems/middle-of-the-linked-list/
-
+ Stupid
 ```C++
 class Solution {
 public:
@@ -212,6 +212,21 @@ public:
             tmp = tmp->next;
         }
         return tmp;
+    }
+};
+```
+Better
+```C++
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        ListNode* fast = head;
+        ListNode* slow = head;
+        while (fast && fast->next) {
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+        return slow;
     }
 };
 ```
