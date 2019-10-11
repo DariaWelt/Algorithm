@@ -37,11 +37,11 @@ public:
         ListNode* slow = head;
         while (fast && fast->next && fast->next->next) {
             fast = fast->next->next;
-            prevslow = slow;
             slow = slow->next;
         }
         return slow;
     }
+    
     
     void reorderList(ListNode* head) {
         if (!head || !head->next || !head->next->next)
@@ -129,21 +129,17 @@ https://leetcode.com/problems/merge-two-sorted-lists/
 class Solution {
 public:
     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        if (!l1){
-            return l2;
-        }
-        if(!l2){
-            return l1;
-        }
         ListNode* head = NULL;
-        if (l1->val > l2->val){
+        if (l1 && l2 && (l1->val > l2->val)){
             head = l2;
             l2 = l2->next;
         }
-        else {
+        else if (l1 && l2){
             head = l1;
             l1 = l1->next;
         }
+        else 
+            return l1? l1 : l2; 
         ListNode* tmp = head;
         while (l1 && l2){
             if (l1->val > l2->val){
@@ -156,14 +152,8 @@ public:
             }
             tmp = tmp->next;
         }
-        if (l1){
-            tmp->next = l1;
-            return head;
-        }
-        else{
-            tmp->next = l2;
-            return head;
-        }
+        tmp->next = l1? l1 : l2;
+        return head;
     }
 };
 ```
@@ -289,40 +279,30 @@ public:
         }
         return head;
     }
-    void reorderList(ListNode* head) {
-        if (!head || !head->next || !head->next->next)
-            return;
-        unsigned size = 0;
-        ListNode* tmp = head, *help;
-        for(size; tmp!= NULL; size++) {
-            tmp = tmp->next;
+    
+    ListNode* middleNode(ListNode* head) {
+        ListNode* fast = head;
+        ListNode* slow = head;
+        while (fast && fast->next && fast->next->next) {
+            fast = fast->next->next;
+            slow = slow->next;
         }
-        tmp = head;
-        for (unsigned i = 0; i < (size - 1) / 2; i++){
-            tmp = tmp->next;
-        }
+        return slow;
+    }
+    
+    bool isPalindrome(ListNode* head) {
+        if (!head || !head->next)
+            return true;
+        ListNode* tmp = middleNode(head);
         ListNode* second = tmp->next;
         tmp->next = NULL;
         second = reverseList(second);
         tmp = head;
-        while (second && tmp){
-            help = tmp->next;
-            tmp->next = second;
-            second = second->next;
-            tmp = tmp->next;
-            tmp->next = help;
-            tmp = tmp->next;
-        }
-    }
-    bool isPalindrome(ListNode* head) {
-        if (!head || !head->next)
-            return true;
-        reorderList(head);
-        ListNode* tmp = head;
-        while (tmp && tmp->next){
-            if (tmp->val != tmp->next->val)
+        while (tmp && second){
+            if (tmp->val != second->val)
                 return false;
-            tmp = tmp->next->next;
+            tmp = tmp->next;
+            second = second->next;
         }
         return true;
     }
@@ -332,12 +312,11 @@ public:
 ## Reverse Linked List
 https://leetcode.com/problems/reverse-linked-list/
 
+Recursively
 ```C++
 class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
-        //Recursively
-        /*
         if (!head || !head->next){
             return head;
         }
@@ -358,9 +337,14 @@ public:
         help->next = rememberHead;
         help->next->next = NULL;
         return head;
-        */
-        
-        //iteratively
+    }
+}
+```
+
+iteratively
+```C++
+class Solution {
+public:
         if (!head || !head->next)
             return head;
         ListNode* prev = NULL;
@@ -457,22 +441,18 @@ https://leetcode.com/problems/sort-list/submissions/
 ```C++
 class Solution {
 public:
-    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        if (!l1){
-            return l2;
-        }
-        if(!l2){
-            return l1;
-        }
+     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
         ListNode* head = NULL;
-        if (l1->val > l2->val){
+        if (l1 && l2 && (l1->val > l2->val)){
             head = l2;
             l2 = l2->next;
         }
-        else {
+        else if (l1 && l2){
             head = l1;
             l1 = l1->next;
         }
+        else 
+            return l1? l1 : l2; 
         ListNode* tmp = head;
         while (l1 && l2){
             if (l1->val > l2->val){
@@ -485,33 +465,24 @@ public:
             }
             tmp = tmp->next;
         }
-        if (l1){
-            tmp->next = l1;
-            return head;
+        tmp->next = l1? l1 : l2;
+        return head;
+    }
+    ListNode* cutMiddle(ListNode* head) {
+        ListNode* fast = head;
+        ListNode* slow = head;
+        while (fast && fast->next && fast->next->next) {
+            fast = fast->next->next;
+            slow = slow->next;
         }
-        else{
-            tmp->next = l2;
-            return head;
-        }
+        ListNode* middle = slow->next;
+        slow->next = NULL;
+        return middle;
     }
     ListNode* sortList(ListNode* head) {
-        if(!head)
-            return NULL;
-        if (!head->next)
+        if(!head || !head->next)
             return head;
-        else {
-            ListNode* tmp = head;
-            unsigned size = 0;
-            for(size; tmp; tmp = tmp->next, ++size);
-            tmp = head;
-            for(unsigned i = 0; i < (size / 2) - 1; ++i, tmp = tmp->next);
-            ListNode* first = tmp->next;
-            tmp->next = NULL;
-            head = this->sortList(head);
-            first = this->sortList(first);
-            head = this->mergeTwoLists(head, first);
-            return head;
-        }
+        return mergeTwoLists(sortList(head),sortList(cutMiddle(head)));
     }
 };
 ```
