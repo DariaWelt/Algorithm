@@ -31,29 +31,35 @@ public:
         }
         return head;
     }
+    
+    ListNode* middleNode(ListNode* head) {
+        ListNode* fast = head;
+        ListNode* slow = head;
+        while (fast && fast->next && fast->next->next) {
+            fast = fast->next->next;
+            prevslow = slow;
+            slow = slow->next;
+        }
+        return slow;
+    }
+    
     void reorderList(ListNode* head) {
         if (!head || !head->next || !head->next->next)
             return;
-        unsigned size = 0;
-        ListNode* tmp = head, *help;
-        for(size; tmp!= NULL; size++) {
-            tmp = tmp->next;
-        }
-        tmp = head;
-        for (unsigned i = 0; i < (size - 1) / 2; i++){
-            tmp = tmp->next;
-        }
+        
+        ListNode* tmp = middleNode(head);
         ListNode* second = tmp->next;
+        ListNode* help;
         tmp->next = NULL;
         second = reverseList(second);
+        
         tmp = head;
-        while (second && tmp){
+        while (tmp && second){
             help = tmp->next;
             tmp->next = second;
             second = second->next;
-            tmp = tmp->next;
-            tmp->next = help;
-            tmp = tmp->next;
+            tmp->next->next = help;
+            tmp = help;
         }
     }
 };
