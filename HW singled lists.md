@@ -196,7 +196,8 @@ public:
 
 ## Middle of the Linked List
 https://leetcode.com/problems/middle-of-the-linked-list/
- Stupid
+
+Stupid
 ```C++
 class Solution {
 public:
@@ -234,6 +235,7 @@ public:
 ## Delete Node in a Linked List
 https://leetcode.com/problems/delete-node-in-a-linked-list/
 
+Really strange way
 ```C++
 class Solution {
 public:
@@ -243,7 +245,21 @@ public:
             node = node->next;
         }
         node->val = node->next->val;
+        delete(node->next);
         node->next = NULL;
+    }
+};
+```
+
+Normal
+```C++
+class Solution {
+public:
+    void deleteNode(ListNode* node) {
+        ListNode* del = node->next;
+        node->val = node->next->val;
+        node->next = node->next->next;
+        delete(del);
     }
 };
 ```
@@ -361,20 +377,22 @@ https://leetcode.com/problems/remove-linked-list-elements/
 class Solution {
 public:
     ListNode* removeElements(ListNode* head, int val) {
+        ListNode* tmp;
+        ListNode* pretmp;
+        while (head && head->val == val){
+            tmp = head;
+            head = head->next;
+            delete(tmp);
+        }
         if (!head)
             return NULL;
-        ListNode* tmp = head;
-        ListNode* pretmp = head;
+        pretmp = head;
+        tmp = head->next;
         while (tmp) {
             if (tmp->val == val) {
-                if (tmp == head) {
-                    head = head->next;
-                    tmp = head;
-                    pretmp = tmp;
-                    continue;
-                }
                 pretmp->next = tmp->next;
-                tmp = tmp->next;
+                delete(tmp);
+                tmp = pretmp->next;
                 continue;
             }
             pretmp = tmp;
