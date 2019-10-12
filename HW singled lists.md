@@ -33,13 +33,13 @@ public:
     }
     
     ListNode* middleNode(ListNode* head) {
-        ListNode* fast = head;
-        ListNode* slow = head;
-        while (fast && fast->next && fast->next->next) {
-            fast = fast->next->next;
-            slow = slow->next;
+        ListNode* fastPtr = head;
+        ListNode* slowPtr = head;
+        while (fastPtr && fastPtr->next && fastPtr->next->next) {
+            fastPtr = fastPtr->next->next;
+            slowPtr = slowPtr->next;
         }
-        return slow;
+        return slowPtr;
     }
     
     
@@ -72,30 +72,30 @@ https://leetcode.com/problems/linked-list-cycle-ii/
 class Solution {
 public:
      ListNode * hasCycle(ListNode *head) {
-        ListNode* slow = head;
-        ListNode* fast = head;
+        ListNode* slowPtr = head;
+        ListNode* fastPtr = head;
         if (!head || !head->next)
             return NULL;
-        while (fast->next && fast->next->next){
-            fast = fast->next->next;
-            slow = slow->next;
-            if (fast->next == slow->next)
-                return fast;
+        while (fastPtr->next && fastPtr->next->next){
+            fastPtr = fastPtr->next->next;
+            slowPtr = slowPtr->next;
+            if (fastPtr->next == slowPtr->next)
+                return fastPtr;
         }
         return NULL;
     }
     ListNode *detectCycle(ListNode *head) {
         if (!head)
             return NULL;
-        ListNode* headtmp = head;
-        ListNode* meet = this->hasCycle(head);
+        ListNode* headTmp = head;
+        ListNode* meetNode = hasCycle(head);
         if (!meet)
             return NULL;
-        while (headtmp != meet){
-            meet = meet->next;
-            headtmp = headtmp->next;
+        while (headTmp != meet){
+            meetNode = meetNode->next;
+            headTmp = headTmp->next;
         }
-        return headtmp;
+        return headTmp;
     }
 };
 ```
@@ -109,12 +109,12 @@ public:
     bool hasCycle(ListNode *head) {
         if (!head || !head->next)
             return false;       
-        ListNode* slow = head;
-        ListNode* fast = head;
-        while (fast->next && fast->next->next){
-            fast = fast->next->next;
-            slow = slow->next;
-            if (fast->next == slow->next)
+        ListNode* slowPtr = head;
+        ListNode* fastPtr = head;
+        while (fastPtr->next && fastPtr->next->next){
+            fastPtr = fastPtr->next->next;
+            slowPtr = slowPtr->next;
+            if (fastPtr->next == slowPtr->next)
                 return true;
         }
         return false;
@@ -129,17 +129,7 @@ https://leetcode.com/problems/merge-two-sorted-lists/
 class Solution {
 public:
     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        ListNode* head = NULL;
-        if (l1 && l2 && (l1->val > l2->val)){
-            head = l2;
-            l2 = l2->next;
-        }
-        else if (l1 && l2){
-            head = l1;
-            l1 = l1->next;
-        }
-        else 
-            return l1? l1 : l2; 
+        ListNode* head = new ListNode(0);
         ListNode* tmp = head;
         while (l1 && l2){
             if (l1->val > l2->val){
@@ -153,6 +143,9 @@ public:
             tmp = tmp->next;
         }
         tmp->next = l1? l1 : l2;
+        tmp = head;
+        head = head->next;
+        delete(tmp);
         return head;
     }
 };
@@ -217,13 +210,13 @@ Better
 class Solution {
 public:
     ListNode* middleNode(ListNode* head) {
-        ListNode* fast = head;
-        ListNode* slow = head;
-        while (fast && fast->next) {
-            fast = fast->next->next;
-            slow = slow->next;
+        ListNode* fastPtr = head;
+        ListNode* slowPtr = head;
+        while (fastPtr && fastPtr->next) {
+            fastPtr = fastPtr->next->next;
+            slowPtr = slowPtr->next;
         }
-        return slow;
+        return slowPtr;
     }
 };
 ```
@@ -281,13 +274,13 @@ public:
     }
     
     ListNode* middleNode(ListNode* head) {
-        ListNode* fast = head;
-        ListNode* slow = head;
-        while (fast && fast->next && fast->next->next) {
-            fast = fast->next->next;
-            slow = slow->next;
+        ListNode* fastPtr = head;
+        ListNode* slowPtr = head;
+        while (fastPtr && fastPtr->next && fastPtr->next->next) {
+            fastPtr = fastPtr->next->next;
+            slowPtr = slowPtr->next;
         }
-        return slow;
+        return slowPtr;
     }
     
     bool isPalindrome(ListNode* head) {
@@ -396,41 +389,23 @@ public:
 ## Intersection of Two Linked Lists
 https://leetcode.com/problems/intersection-of-two-linked-lists/
 
+Approach "Two Pointers"
 ```C++
-#include <cmath>
 class Solution {
 public:
-    
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        if (headA == NULL || headB == NULL)
-          return NULL;
-        ListNode* tmp1 = headA;
-        ListNode* tmp2 = headB;
-        unsigned sizeA = 0, sizeB = 0;
-        for (sizeA; tmp1; sizeA++) {
-          tmp1 = tmp1->next;
+        ListNode *tmpA = headA, *tmpB = headB;
+        while(tmpA && tmpB){
+            if(tmpB == tmpA)
+                return tmpB;
+            tmpA = tmpA->next;
+            tmpB = tmpB->next;
+            if(!tmpA)
+                tmpA = headB;
+            else if(!tmpB)
+                tmpB = headA;
         }
-        for (sizeB; tmp2; sizeB++) {
-          tmp2 = tmp2->next;
-        }
-        tmp2 = headB;
-        tmp1 = headA;
-        if (sizeA > sizeB) {
-          for (unsigned i = 0; i < sizeA - sizeB; tmp1 = tmp1->next, ++i) {};
-        }
-        else if (sizeB > sizeA) {
-          for (unsigned i = 0; i < sizeB - sizeA; tmp2 = tmp2->next, ++i);
-        }
-        while (tmp1 != tmp2 && tmp1 != NULL) {
-          tmp1 = tmp1->next;
-          tmp2 = tmp2->next;
-        }
-        if (tmp1 == NULL) {
-          return NULL;
-        }
-        else {
-          return tmp1;
-        }
+        return NULL;
     }
 };
 ```
@@ -441,18 +416,8 @@ https://leetcode.com/problems/sort-list/submissions/
 ```C++
 class Solution {
 public:
-     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        ListNode* head = NULL;
-        if (l1 && l2 && (l1->val > l2->val)){
-            head = l2;
-            l2 = l2->next;
-        }
-        else if (l1 && l2){
-            head = l1;
-            l1 = l1->next;
-        }
-        else 
-            return l1? l1 : l2; 
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        ListNode* head = new ListNode(0);
         ListNode* tmp = head;
         while (l1 && l2){
             if (l1->val > l2->val){
@@ -466,6 +431,9 @@ public:
             tmp = tmp->next;
         }
         tmp->next = l1? l1 : l2;
+        tmp = head;
+        head = head->next;
+        delete(tmp);
         return head;
     }
     ListNode* cutMiddle(ListNode* head) {
