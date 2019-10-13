@@ -1,6 +1,6 @@
 # Arrays
-+[Triple Sum](#triple-sum)
-+[Two Sum](#two-sum)
++ [Triple Sum](#triple-sum)
++ [Two Sum](#two-sum)
 
 # Two Sum
 https://leetcode.com/problems/two-sum/submissions/
