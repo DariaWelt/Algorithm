@@ -1,7 +1,9 @@
 # Topological Sort
-+ [Course Schedule 1](#course-schedule-1)
++ [Course Schedule I](#course-schedule-i)
++ [Course Schedule II](#course-schedule-ii)
++ 
 
-## Course Schedule 1
+## Course Schedule I
 https://leetcode.com/problems/course-schedule/submissions/
 
 ```C++
@@ -53,3 +55,61 @@ public:
   }
 };
 ```
+## Course Schedule II
+https://leetcode.com/problems/course-schedule-ii/solution/
+
+```C++
+
+#define GRAY 1
+#define BLACK 2
+
+class Solution {
+private:
+  vector<int> orderSchedule;
+public:
+  bool cycle(int node, vector<vector<int>>& graph, vector<int>& color) {
+    if (color[node] == GRAY)
+      return true;
+    if(graph[node].size() > 0)
+      color[node] = GRAY;
+    else {
+      orderSchedule.push_back(node);
+      color[node] = BLACK;
+      return false;
+    }
+    for (size_t i = 0; i < graph[node].size(); ++i) {
+      switch (color[graph[node][i]])
+      {
+      case GRAY:
+        return true;
+      case BLACK:
+        continue;
+      case WHITE:
+        if (cycle(graph[node][i], graph, color))
+          return true;
+        else
+          color[graph[node][i]] = BLACK;
+      }
+    }
+    color[node] = BLACK;
+    orderSchedule.push_back(node);
+    return false;
+  }
+  vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+    vector<int> color(numCourses, 0);
+    vector<vector<int>> graph(numCourses);
+    for (size_t i = 0; i < prerequisites.size(); ++i) {
+      graph[prerequisites[i][0]].push_back(prerequisites[i][1]);
+    }
+    for (size_t i = 0; i < numCourses; ++i) {
+      if (color[i] == BLACK)
+        continue;
+      if (cycle(i, graph, color))
+        return vector<int>(0);
+    }
+    
+    return orderSchedule;
+  }
+};
+```
+
