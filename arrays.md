@@ -6,7 +6,7 @@
 # Two Sum
 https://leetcode.com/problems/two-sum/submissions/
 
-Time complexity : O(n^2)
+Time complexity : O(n^2) 
 Space complexity : O(1)
 ```C++
 class Solution {
@@ -28,7 +28,7 @@ public:
 ```
 
 HASH TABLE
-Time complexity : O(n)
+Time complexity : O(n log(n))
 Space complexity : O(n)
 ```C++
 #include <map>
@@ -123,18 +123,12 @@ public:
   int subarraySum(vector<int>& nums, int k) {
       int sum = 0, counter = 0;
       map<int,int> HashMap;
-      map<int,int> :: iterator searchSum;
       HashMap[0] = 1;
       for (size_t i = 0; i < nums.size(); ++i){
           sum += nums[i];
-          searchSum = HashMap.find(sum - k);    //O(log(HashMap.size()))
-          if (searchSum != HashMap.end())
-              counter += searchSum->second;;
-          searchSum = HashMap.find(sum);
-          if (searchSum != HashMap.end())
-              ++(searchSum->second);
-          else 
-              HashMap[sum] = 1;
+          if (HashMap.find(sum - k) != HashMap.end())
+              counter += HashMap[sum - k];
+          ++HashMap[sum];
       }
       return counter;
   }
