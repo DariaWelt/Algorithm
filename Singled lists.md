@@ -186,7 +186,10 @@ public:
 ## Middle of the Linked List
 https://leetcode.com/problems/middle-of-the-linked-list/
 
-Stupid
+Time Complexity: O(n)
+Space Complexity: O(1)
+
+Slow
 ```C++
 class Solution {
 public:
@@ -205,7 +208,7 @@ public:
     }
 };
 ```
-Better
+Faster
 ```C++
 class Solution {
 public:
