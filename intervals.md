@@ -10,23 +10,24 @@ https://leetcode.com/problems/non-overlapping-intervals/
 #include <algorithm>
 class Solution {
 public:
-  int eraseOverlapIntervals(vector<vector<int>>& intervals) {
-    if (intervals.size() == 0)
-      return 0;
-    int counter = 0, i = 0, j;
-    sort(intervals.begin(), intervals.end(), [](const vector <int> &a, const vector <int> &b) {return a[0] < b[0]; });
-    while (i < intervals.size() - 1) {
-      j = i + 1;
-      while (j < intervals.size() && intervals[i][1] > intervals[j][0]) {
-        ++counter;
-         if (intervals[i][1] - intervals[i][0] > intervals[j][1] - intervals[j][0])
-          break;
-        ++j;
-      }
-      i = j;
+    static bool cmpIntervals (vector<int>& a, vector<int>& b) {
+        return a[0] < b[0];
     }
-    return counter;
-  }
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        if (intervals.size() == 0)
+            return 0;
+        sort(intervals.begin(), intervals.end(),cmpIntervals);
+        int currentEnd = intervals[0][1], counter = 0;
+        for (size_t i = 1; i < intervals.size(); ++i) {
+            if (currentEnd > intervals[i][0]){
+                ++counter;
+                if (currentEnd < intervals[i][1])
+                    continue;
+            }
+            currentEnd = intervals[i][1];
+        }
+        return counter;
+    }
 };
 ```
 ## Merge Intervals
@@ -56,5 +57,26 @@ public:
 https://leetcode.com/problems/insert-interval/
 
 ```C++
-
+class Solution {
+public:
+  vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+    if (intervals.size() == 0)
+      return { newInterval };
+    vector<vector<int>> result;
+    size_t i = 0;
+    for (; i < intervals.size() && intervals[i][1] < newInterval[0]; ++i)
+      result.push_back(intervals[i]);
+    if (i != intervals.size() && intervals[i][0] <= newInterval[1]) {
+      newInterval[0] = min(intervals[i][0], newInterval[0]);
+      while (i < intervals.size() - 1 && intervals[i + 1][0] <= newInterval[1])
+        ++i;
+      newInterval[1] = max(intervals[i][1], newInterval[1]);
+      ++i;
+    }
+    result.push_back(newInterval);
+    for (; i < intervals.size(); ++i)
+      result.push_back(intervals[i]);
+    return result;
+  }
+};
 ```
