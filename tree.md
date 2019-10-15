@@ -1,6 +1,6 @@
 # Tree
 + [Binary Tree Inorder Traversal](#binary-tree-inorder-traversal)
-
++ [Symmetric Tree](#symmetric-tree)
 
 Definition for a binary tree node.
 ```C++
@@ -55,7 +55,48 @@ public:
     }
 };
 ```
+## Symmetric Tree
+https://leetcode.com/problems/symmetric-tree/
 
+reqursively
+```C++
+class Solution {
+public:
+    bool reqursionMirror(TreeNode* tree1, TreeNode* tree2) {
+        if (!tree1 && !tree2)
+            return true;
+        else if (!tree1 || !tree2)
+            return false;
+        return (tree1->val == tree2->val) 
+            && reqursionMirror(tree1->left, tree2->right) /*   /\    */
+            && reqursionMirror(tree1->right, tree2->left); /*  \/    */
+    }
+    bool isSymmetric(TreeNode* root) {
+        return reqursionMirror(root, root);
+    }
+};
+```
+
+iteratively
+```C++
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if (!root)
+            return true;
+        stack <TreeNode*>  left, right;
+        left.push(root->left);
+        right.push(root->right);
+        TreeNode *curR, *curL;
+        while(1) {
+            ......
+        }
+    }
+};
+```
+
+```C++
+```
 
 ```C++
 ```
