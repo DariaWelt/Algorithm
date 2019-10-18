@@ -95,12 +95,29 @@ public:
     bool isSymmetric(TreeNode* root) {
         if (!root)
             return true;
-        stack <TreeNode*>  left, right;
-        left.push(root->left);
-        right.push(root->right);
-        TreeNode *curR, *curL;
+        stack <TreeNode*>  stackL, stackR;
+        TreeNode *curR = root->left, *curL = root->right;
         while(1) {
-            ......
+            if (!curR && !curL) {
+                if (stackL.empty())
+                    return true;
+                curL = stackL.top();
+                curR = stackR.top();
+                if (curL->val != curR->val)
+                    return false;
+                curL = curL->right;
+                curR = curR->left;
+                stackL.pop();
+                stackR.pop();
+            }
+            else if (!curR || !curL)
+                return false;
+            else {
+                stackL.push(curL);
+                stackR.push(curR);
+                curL = curL->left;
+                curR = curR->right;
+            }
         }
     }
 };
