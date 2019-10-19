@@ -181,6 +181,17 @@ public:
 https://leetcode.com/problems/path-sum/
 
 ```C++
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int sum) {
+        if(!root)
+            return false;
+        if (sum - root->val == 0 &&!root->left && !root->right)
+            return true;
+        return hasPathSum(root->left, sum - root->val) 
+            || hasPathSum(root->right, sum - root->val);
+    }
+};
 ```
 
 
@@ -209,13 +220,11 @@ public:
         }
     }
     bool isSubtree(TreeNode* s, TreeNode* t) {
-        if (!t)
-            return true;
         if (!s)
             return false;
-        if (s->val == t->val)
-            return
-            ....
+        return isSameTree(s,t) 
+            || isSubtree (s->left, t)
+            || isSubtree (s->right, t);
     }
 };
 ```
@@ -223,7 +232,23 @@ public:
 ## Kth Smallest Element in a BST
 https://leetcode.com/problems/kth-smallest-element-in-a-bst/
 
+reqursively
 ```C++
+class Solution {
+public:
+    void inOrder (TreeNode* root, vector<int>& vec) {
+        if (!root)
+            return;
+        inOrder (root->left, vec);
+        vec.push_back(root->val);
+        inOrder (root->right, vec);
+    }
+    int kthSmallest(TreeNode* root, int k) {
+        vector<int> order;
+        inOrder(root, order);
+        return order[k - 1];
+    }
+};
 ```
 
 ##  Lowest Common Ancestor of a Binary Search Tree
