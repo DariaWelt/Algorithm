@@ -38,8 +38,7 @@ public:
         map<int,int> HashMap;
         map<int,int> :: iterator searchNum;
         for (size_t i = 0; i < nums.size(); ++i){
-            int secNum = target - nums[i];
-            searchNum = HashMap.find(secNum);
+            searchNum = HashMap.find(target - nums[i]);
             if (searchNum != HashMap.end())
                 return {searchNum->second, i};
             HashMap[nums[i]] = i; 
@@ -64,14 +63,13 @@ public:
         vector<vector<int>> solutionSet;
         if (nums.size() < 3)
             return solutionSet;
-        size_t second, third = nums.size() - 1;
-        for (size_t i = 0; i < third - 1; ++i) {
+        size_t second;
+        for (size_t i = 0; i < nums.size() - 2; ++i) {
             second = i + 1;
-            third = nums.size() - 1;
+            size_t third = nums.size() - 1;
             while (second < third) {
                 if (nums[i] + nums[second] == -nums[third]) {
-                    vector<int> tmp = { nums[i], nums[second], nums[third] };
-                    solutionSet.push_back(tmp);
+                    solutionSet.push_back({ nums[i], nums[second], nums[third] });
                     while (second < third && nums[second] == nums[second + 1]) second++;
                     while (second < third && nums[third] == nums[third - 1]) third--;
                     ++second;
