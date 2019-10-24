@@ -34,7 +34,7 @@ public:
     return false;
   }
   bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-    vector<int> color(numCourses, 0);
+    vector<int> color(numCourses, WHITE);
     vector<vector<int>> graph(numCourses);
     for (size_t i = 0; i < prerequisites.size(); ++i) {
       graph[prerequisites[i][1]].push_back(prerequisites[i][0]);
@@ -81,7 +81,7 @@ public:
     return false;
   }
   vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
-    vector<int> color(numCourses, 0);
+    vector<int> color(numCourses, WHITE);
     vector<vector<int>> graph(numCourses);
     for (size_t i = 0; i < prerequisites.size(); ++i) {
       graph[prerequisites[i][0]].push_back(prerequisites[i][1]);
@@ -108,33 +108,25 @@ class Solution {
 private:
   string orderLetters;
 public:
-  bool cycle(int node, vector<vector<char>>& graph, vector<int>& color) {
+  bool cycle(int node, vector<vector<int>>& graph, vector<int>& color) {
     if (color[node] == GRAY)
-      return true;
-    if (graph[node].size() > 0)
-      color[node] = GRAY;
-    else {
-      orderLetters.push_back(node + 'a');
-      color[node] = BLACK;
-      return false;
-    }
-    for (size_t i = 0; i < graph[node].size(); ++i) {
-      switch (color[graph[node][i]])
-      {
-      case GRAY:
         return true;
-      case BLACK:
-        continue;
-      case WHITE:
-        if (cycle(graph[node][i], graph, color))
-          return true;
-        else
-          color[graph[node][i]] = BLACK;
-      }
+    if(color[node] == WHITE) {
+        color[node] = GRAY;
+        for (size_t i = 0; i < graph[node].size(); ++i) {
+            switch (color[graph[node][i]]) {
+                case GRAY:
+                    return true;
+                case WHITE:
+                    if (cycle(graph[node][i], graph, color))
+                        return true;
+                    else
+                        color[graph[node][i]] = BLACK;
+            }
+        }
     }
-    color[node] = BLACK;
-
     orderLetters.push_back(node + 'a');
+    color[node] = BLACK;
     return false;
   }
   string alienOrder(vector<string> &words) {
