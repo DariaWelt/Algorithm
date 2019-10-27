@@ -12,6 +12,7 @@
 + [Lowest Common Ancestor of a Binary Tree](#lowest-common-ancestor-of-a-binary-tree)
 + [Validate Binary Search Tree](#validate-binary-search-tree)
 + [Binary Search Tree Iterator](#binary-search-tree-iterator)
++ [Inorder Successor in BST](#inorder-successor-in-bst)
 
 Definition for a binary tree node.
 ```C++
@@ -198,7 +199,52 @@ public:
 ## Binary Tree Level Order Traversal
 https://leetcode.com/problems/binary-tree-level-order-traversal/
 
+reqursively
 ```C++
+class Solution {
+public:
+    void createLevels (TreeNode* root, int level, vector<vector<int>>& res) {
+        if (!root)
+            return;
+        if (level + 1 > res.size())
+            res.push_back({});
+        res[level].push_back(root->val);
+        createLevels(root->left, level + 1, res);
+        createLevels(root->right, level + 1, res);
+    }
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        createLevels(root, 0, res);
+        return res;
+    }
+};
+```
+
+iteratively
+```C++
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        if (!root)
+            return {};
+        vector<vector<int>> res;
+        queue<TreeNode*> order;
+        order.push(root);
+        while (order.size()) {
+            res.push_back({});
+            for (int i = 0, sizeLevel = order.size(); i < sizeLevel; ++i) {
+                TreeNode* currentNode = order.front();
+                order.pop();
+                res.back().push_back(currentNode->val);
+                if (currentNode->left)
+                    order.push(currentNode->left);
+                if (currentNode->right)
+                    order.push(currentNode->right);
+            }
+        }
+        return res;
+    }
+};
 ```
 
 ## Subtree of Another Tree
@@ -301,10 +347,63 @@ https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
 https://leetcode.com/problems/validate-binary-search-tree/
 
 ```C++
+class Solution {
+public:
+    // based on iterativetily inorder
+    bool isValidBST(TreeNode* root) {
+        stack <TreeNode*> treeHigh;
+        TreeNode* currentNode = root;
+        double prevVal = 0;
+        bool isFirst = true;
+        while (currentNode || !treeHigh.empty()) {
+            while (currentNode) {
+                treeHigh.push(currentNode);
+                currentNode = currentNode->left;
+            }
+            currentNode = treeHigh.top();
+            treeHigh.pop();
+            if (!isFirst && prevVal >= currentNode->val)
+                return false;
+            prevVal = currentNode->val;
+            currentNode = currentNode->right;
+            isFirst = false;
+        }
+        return true;
+    }
+};
 ```
 
 ## Binary Search Tree Iterator
 https://leetcode.com/problems/binary-search-tree-iterator/
 
 ```C++
+```
+
+## Inorder Successor in BST
+Given a binary search tree and a node in it.
+
+```C++
+struct TreeNode {
+    TreeNode *parent;
+    TreeNode *left;
+    TreeNode *right;
+};
+```
+
+Find the in-order successor of that node in the BST.
+
+```C++
+TreeNode* inorderSuccessor(TreeNode* node) {
+    TreeNode* tmpNode = node;
+    TreeNode* tmpParent = node->parent;
+    if (tmpParent && tmpParent->left == tmpNode)
+        return tmpParent;
+    while (tmpParent && tmpParent->right == tmpNode) {
+        tmpNode = tmpParent;
+        tmpParent = tmpParent->parent;
+    }
+    if (tmpParent)
+        return tmpParent;
+    return NULL;
+}
 ```
