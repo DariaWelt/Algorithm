@@ -7,27 +7,22 @@
 https://leetcode.com/problems/course-schedule/submissions/
 
 ```C++
-#define WHITE 0
-#define GRAY 1
-#define BLACK 2
+static const int WHITE = 0;
+static const int GRAY = 1;
+static const int BLACK = 2;
 
 class Solution {
 public:
   bool cycle(int node, vector<vector<int>>& graph, vector<int>& color) {
-    if (color[node] == GRAY)
-        return true;
-    if(color[node] == WHITE) {
-        color[node] = GRAY;
-        for (size_t i = 0; i < graph[node].size(); ++i) {
-            switch (color[graph[node][i]]) {
-                case GRAY:
+    color[node] = GRAY;
+    for (size_t i = 0; i < graph[node].size(); ++i) {
+        if (color[graph[node][i]] == GRAY) 
                     return true;
-                case WHITE:
-                    if (cycle(graph[node][i], graph, color))
-                        return true;
-                    else
-                        color[graph[node][i]] = BLACK;
-            }
+        else if (color[graph[node][i]] == WHITE) {
+            if (cycle(graph[node][i], graph, color))
+                return true;
+            else
+                color[graph[node][i]] = BLACK;
         }
     }
     color[node] = BLACK;
@@ -37,10 +32,10 @@ public:
     vector<int> color(numCourses, WHITE);
     vector<vector<int>> graph(numCourses);
     for (size_t i = 0; i < prerequisites.size(); ++i) {
-      graph[prerequisites[i][1]].push_back(prerequisites[i][0]);
+        graph[prerequisites[i][1]].push_back(prerequisites[i][0]);
     }
     for (size_t i = 0; i < numCourses; ++i) {
-        if (color[i] != BLACK && cycle(i, graph, color))
+        if ((color[i] == GRAY) || (color[i] != BLACK && cycle(i, graph, color)))
             return false;
     }
     return true;
@@ -51,29 +46,24 @@ public:
 https://leetcode.com/problems/course-schedule-ii/solution/
 
 ```C++
-#define WHITE 0
-#define GRAY 1
-#define BLACK 2
+static const int WHITE = 0;
+static const int GRAY = 1;
+static const int BLACK = 2;
 
 class Solution {
 private:
   vector<int> orderSchedule;
 public:
   bool cycle(int node, vector<vector<int>>& graph, vector<int>& color) {
-    if (color[node] == GRAY)
-        return true;
-    if(color[node] == WHITE) {
-        color[node] = GRAY;
-        for (size_t i = 0; i < graph[node].size(); ++i) {
-            switch (color[graph[node][i]]) {
-                case GRAY:
+    color[node] = GRAY;
+    for (size_t i = 0; i < graph[node].size(); ++i) {
+        if (color[graph[node][i]] == GRAY) 
                     return true;
-                case WHITE:
-                    if (cycle(graph[node][i], graph, color))
-                        return true;
-                    else
-                        color[graph[node][i]] = BLACK;
-            }
+        else if (color[graph[node][i]] == WHITE) {
+            if (cycle(graph[node][i], graph, color))
+                return true;
+            else
+                color[graph[node][i]] = BLACK;
         }
     }
     orderSchedule.push_back(node);
@@ -87,7 +77,7 @@ public:
       graph[prerequisites[i][0]].push_back(prerequisites[i][1]);
     }
     for (size_t i = 0; i < numCourses; ++i) {
-      if (color[i] != BLACK && cycle(i, graph, color))
+      if ((color[i] == GRAY) || (color[i] != BLACK && cycle(i, graph, color)))
         return vector<int>(0);
     }
     return orderSchedule;
@@ -99,33 +89,28 @@ public:
 https://www.lintcode.com/problem/alien-dictionary/description
 
 ```C++
-#define WHITE 0
-#define GRAY 1
-#define BLACK 2
-#define NO -1
+static const int WHITE = 0;
+static const int GRAY = 1;
+static const int BLACK = 2;
+static const int NO = -1;
 
 class Solution {
 private:
   string orderLetters;
 public:
   bool cycle(int node, vector<vector<int>>& graph, vector<int>& color) {
-    if (color[node] == GRAY)
-        return true;
-    if(color[node] == WHITE) {
-        color[node] = GRAY;
-        for (size_t i = 0; i < graph[node].size(); ++i) {
-            switch (color[graph[node][i]]) {
-                case GRAY:
+    color[node] = GRAY;
+    for (size_t i = 0; i < graph[node].size(); ++i) {
+        if (color[graph[node][i]] == GRAY) 
                     return true;
-                case WHITE:
-                    if (cycle(graph[node][i], graph, color))
-                        return true;
-                    else
-                        color[graph[node][i]] = BLACK;
-            }
+        else if (color[graph[node][i]] == WHITE) {
+            if (cycle(graph[node][i], graph, color))
+                return true;
+            else
+                color[graph[node][i]] = BLACK;
         }
     }
-    orderLetters.push_back(node + 'a');
+    orderSchedule.push_back(node + 'a');
     color[node] = BLACK;
     return false;
   }
