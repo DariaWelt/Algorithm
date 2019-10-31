@@ -341,6 +341,18 @@ public:
 https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/
 
 ```C++
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (!root || root == p || root == q)
+            return root;
+        TreeNode* L = lowestCommonAncestor(root->left,p,q);
+        TreeNode* R = lowestCommonAncestor(root->right,p,q);
+        if (root == L || root == R || (R && L))
+            return root;
+        else return L? L : R;
+    }
+};
 ```
 
 ## Validate Binary Search Tree
@@ -376,7 +388,37 @@ public:
 ## Binary Search Tree Iterator
 https://leetcode.com/problems/binary-search-tree-iterator/
 
+Stack approach.
+Time complexity - O(1). Though goLeft function is linear (O(N) in the worst case), the amortized (average) time complexity for this function would still be O(1).
+Space complexity - O(h)  where h is the height of the tree.
 ```C++
+class BSTIterator {
+    stack<TreeNode*> inorderStack;
+    void goLeft (TreeNode* root) {
+        while (root) {
+            inorderStack.push(root);
+            root = root->left;
+        }
+    }
+public:
+    BSTIterator(TreeNode* root) {
+        goLeft(root);
+    }
+    
+    /** @return the next smallest number */
+    int next() {
+        TreeNode* res = inorderStack.top();
+        inorderStack.pop();
+        if (res->right)
+            goLeft(res->right);
+        return res->val;
+    }
+    
+    /** @return whether we have a next smallest number */
+    bool hasNext() {
+        return !inorderStack.empty();
+    }
+};
 ```
 
 ## Inorder Successor in BST
