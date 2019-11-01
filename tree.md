@@ -98,10 +98,14 @@ public:
             return true;
         stack <TreeNode*>  stackL, stackR;
         TreeNode *curR = root->left, *curL = root->right;
-        while(1) {
-            if (!curR && !curL) {
-                if (stackL.empty())
-                    return true;
+        while(curR || curL || !stackL.empty()) {
+            if (curR && curL) {
+                stackL.push(curL);
+                stackR.push(curR);
+                curL = curL->left;
+                curR = curR->right;
+            }
+            else if (!curR && !curL) {
                 curL = stackL.top();
                 curR = stackR.top();
                 if (curL->val != curR->val)
@@ -111,15 +115,10 @@ public:
                 stackL.pop();
                 stackR.pop();
             }
-            else if (!curR || !curL)
+            else 
                 return false;
-            else {
-                stackL.push(curL);
-                stackR.push(curR);
-                curL = curL->left;
-                curR = curR->right;
-            }
         }
+        return true;
     }
 };
 ```
@@ -168,9 +167,7 @@ public:
     TreeNode* invertTree(TreeNode* root) {
         if (!root)
             return root;
-        TreeNode* tmp = root->left;
-        root->left = root->right;
-        root->right = tmp;
+        swap(root->left, root->right);
         invertTree(root->left);
         invertTree(root->right);
         return root;
@@ -187,7 +184,7 @@ public:
     bool hasPathSum(TreeNode* root, int sum) {
         if(!root)
             return false;
-        if (sum - root->val == 0 &&!root->left && !root->right)
+        if (!(sum - root->val) && !root->left && !root->right)
             return true;
         return hasPathSum(root->left, sum - root->val) 
             || hasPathSum(root->right, sum - root->val);
@@ -232,7 +229,8 @@ public:
         order.push(root);
         while (order.size()) {
             res.push_back({});
-            for (int i = 0, sizeLevel = order.size(); i < sizeLevel; ++i) {
+            int sizeLevel = order.size();
+            for (int i = 0; i < sizeLevel; ++i) {
                 TreeNode* currentNode = order.front();
                 order.pop();
                 res.back().push_back(currentNode->val);
@@ -282,12 +280,12 @@ reqursively
 ```C++
 class Solution {
 public:
-    void inOrder (TreeNode* root, vector<int>& vec) {
+    void inOrder (TreeNode* root, vector<int>& order) {
         if (!root)
             return;
-        inOrder (root->left, vec);
-        vec.push_back(root->val);
-        inOrder (root->right, vec);
+        inOrder (root->left, order);
+        order.push_back(root->val);
+        inOrder (root->right, order);
     }
     int kthSmallest(TreeNode* root, int k) {
         vector<int> order;
