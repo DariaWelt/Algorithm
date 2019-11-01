@@ -3,7 +3,7 @@
 + [Two Sum](#two-sum)
 + [Subarray Sum Equals K](#subarray-sum-equals-k)
 
-# Two Sum
+## Two Sum
 https://leetcode.com/problems/two-sum/submissions/
 
 Time complexity : O(n^2) 
