@@ -203,7 +203,7 @@ public:
     void createLevels (TreeNode* root, int level, vector<vector<int>>& res) {
         if (!root)
             return;
-        if (level + 1 > res.size())
+        if (level >= res.size())
             res.push_back({});
         res[level].push_back(root->val);
         createLevels(root->left, level + 1, res);
@@ -322,13 +322,14 @@ public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
         if (!p || !q)
             return NULL;
-        TreeNode* tmp = root;
-        while (tmp) {
-            if (tmp->val > p->val && tmp->val > q->val)
-                tmp = tmp->left;
-            else if (tmp->val < p->val && tmp->val < q->val)
-                tmp = tmp->right;
-            else return tmp;
+        TreeNode* current = root;
+        while (current) {
+            if (current->val > p->val && current->val > q->val)
+                current = current->left;
+            else if (current->val < p->val && current->val < q->val)
+                current = current->right;
+            else 
+                return current;
         }
         return NULL;
     }
@@ -363,7 +364,7 @@ public:
     bool isValidBST(TreeNode* root) {
         stack <TreeNode*> treeHigh;
         TreeNode* currentNode = root;
-        double prevVal = 0;
+        int prevVal = 0;
         bool isFirst = true;
         while (currentNode || !treeHigh.empty()) {
             while (currentNode) {
