@@ -184,7 +184,7 @@ public:
     bool hasPathSum(TreeNode* root, int sum) {
         if(!root)
             return false;
-        if (!(sum - root->val) && !root->left && !root->right)
+        if ((sum == root->val) && !root->left && !root->right)
             return true;
         return hasPathSum(root->left, sum - root->val) 
             || hasPathSum(root->right, sum - root->val);
