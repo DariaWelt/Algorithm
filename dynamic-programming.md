@@ -1,5 +1,22 @@
 # Dynamic programming
++ [Climbing Stairs](#climbing-stairs)
 + [Longest Common Subsequence](#longest-common-subsequence)
++ [Unique Paths](#unique-paths)
+
+## Climbing Stairs
+https://leetcode.com/problems/climbing-stairs/
+```C++
+int climbStairs(int n) {
+    if (n < 2)
+        return n;
+    int first = 0, second = 1;
+    while (n--){
+        first += second;
+        swap(first, second);
+    }
+    return second;
+}
+ ```
 
 ## Longest Common Subsequence
 https://leetcode.com/problems/longest-common-subsequence/
@@ -64,3 +81,24 @@ public:
     }
 };
 ```
+
+## Unique Paths
+https://leetcode.com/problems/unique-paths/
+
+
+with memory optimization (instead of array [M][N] we use array [min(M, N)] )
+```C++
+int uniquePaths(int m, int n) {
+    if (m > n){
+        swap(m,n);
+    } 
+    vector<int> diag(m, 0);
+    diag[m-1] = 1;
+    for (int i = 0; i < (m - 1) + (n - 1); ++i) { //we step up throw grid almost twise
+        for (int j = 0; j < m - 1; ++j) {
+            diag[j] += diag[j+1];
+        }
+    }
+    return diag[0];
+}
+    ```
