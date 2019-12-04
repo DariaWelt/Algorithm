@@ -2,6 +2,7 @@
 + [Climbing Stairs](#climbing-stairs)
 + [Longest Common Subsequence](#longest-common-subsequence)
 + [Unique Paths](#unique-paths)
++ [Jump Game](#jump-game)
 
 ## Climbing Stairs
 https://leetcode.com/problems/climbing-stairs/
@@ -101,4 +102,57 @@ int uniquePaths(int m, int n) {
     }
     return diag[0];
 }
-    ```
+```
+
+## Jump Game
+https://leetcode.com/problems/jump-game/submissions/
+
+1)Using helping array of condition (bad or good this point is)
+Time Complexity = O(n^2)
+Space Complexity = O(n)
+
+```C++
+bool canJump(vector<int>& nums) {
+    vector<int> condition (nums.size(),0);
+    condition[nums.size()-1] = 1;
+    for (int i = nums.size() - 1; i > 0; --i) {
+        for (int j = 0; j < nums[i-1] && i + j < nums.size(); ++j) {
+            if (condition[i-1] == 0){
+                condition[i-1] += condition[i+j];
+            }
+        }
+    }
+    return condition[0] == 1;
+}
+```
+
+2)using only one position - lower good point
+Time Complexity = O(n)
+Space Complexity = O(1)
+
+```C++
+ bool canJump(vector<int>& nums) {
+    int possibPos = nums.size()-1;
+    for (int curPos = nums.size()-2; curPos >=0; --curPos) {
+        if (curPos + nums[curPos] >= possibPos)
+            possibPos = curPos;
+    }
+    return possibPos == 0;
+}
+```
+
+```C++
+```
+
+```C++
+```
+
+```C++
+```
+
+```C++
+```
+
+
+```C++
+```
