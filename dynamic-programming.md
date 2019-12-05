@@ -6,6 +6,7 @@
 + [Jump Game](#jump-game)
 + [House Robber](#house-robber)
 + [House Robber II](#house-robber-ii)
++ [N-Queens](#n-queens)
 
 ## Climbing Stairs
 https://leetcode.com/problems/climbing-stairs/
@@ -215,9 +216,43 @@ int rob(vector<int>& nums) {
 }
 ```
 
-
-
+## N-Queens
+https://leetcode.com/problems/n-queens/
 ```C++
+class Solution {
+private:
+    bool isvalid(vector<string>& board, int row, int col, vector<int>& diag1, vector<int>& diag2, vector<int>& columns) {
+        return !columns[col] && !diag1[row + col] && !diag2[row - col + board.size() - 1];
+    }
+    void StandQ(vector<string>& board, vector<vector<string>>& result, 
+                int row, vector<int>& diag1, vector<int>& diag2, vector<int>& col) {
+        if (row == col.size()){
+            vector<string> var = board;
+            result.push_back(var);
+        } else {
+            for (int i = 0; i < col.size(); ++i) {
+                if (isvalid(board, row, i, diag1, diag2, col)) {
+                    board[row][i] = 'Q';
+                    diag1[row + i] = diag2[row - i + board.size() - 1] = col[i] = 1;
+                    StandQ(board, result, row + 1, diag1, diag2, col);
+                    diag1[row + i] = diag2[row - i + board.size() - 1] = col[i] = 0;
+                    board[row][i] = '.';
+                }
+            }
+        }
+    }
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> result;
+        vector<int> diag1(2 * n,0);
+        vector<int> diag2(2 * n,0);
+        vector<int> columns(n,0);
+        string s(n,'.');
+        vector<string> board(n, s);
+        StandQ(board, result, 0, diag1, diag2, columns);
+        return result;
+    }
+};
 ```
 
 
