@@ -1,8 +1,11 @@
 # Dynamic programming
 + [Climbing Stairs](#climbing-stairs)
++ [Coin Change](#coin-change)
 + [Longest Common Subsequence](#longest-common-subsequence)
 + [Unique Paths](#unique-paths)
 + [Jump Game](#jump-game)
++ [House Robber](#house-robber)
++ [House Robber II](#house-robber-ii)
 
 ## Climbing Stairs
 https://leetcode.com/problems/climbing-stairs/
@@ -18,6 +21,24 @@ int climbStairs(int n) {
     return second;
 }
  ```
+## Coin Change
+https://leetcode.com/problems/coin-change/ 
+```C++
+int coinChange(vector<int>& coins, int amount) {
+    if (!coins.size())
+        return -1;
+    vector<int> sum(amount + 1,amount + 1);
+    sum[0] = 0;
+    for (int i = 1; i < amount + 1; ++i) {
+        for (int j = 0; j < coins.size(); ++j) {
+            if (i >= coins[j]){
+                sum[i] = min(sum[i], sum[i - coins[j]] + 1);
+            }
+        }
+    }
+    return sum[amount] > amount ? -1 : sum[amount];
+}
+```
 
 ## Longest Common Subsequence
 https://leetcode.com/problems/longest-common-subsequence/
@@ -141,14 +162,60 @@ Space Complexity = O(1)
 }
 ```
 
+## House Robber
+
+https://leetcode.com/problems/house-robber
 ```C++
+int rob(vector<int>& nums) {
+    if (nums.size() == 0){
+        return 0;
+    }
+    if (nums.size() == 1){
+        return nums[0];
+    }
+    int first = nums[0], second = nums[1];
+    for (int i = 2; i < nums.size(); ++i) {
+        swap(first, second);
+        int tmps = second;
+        second = max(second + nums[i], first);
+        first = max(first, tmps);
+    }
+    return max(first, second);
+}
 ```
+## House Robber II
+
+https://leetcode.com/problems/house-robber-ii/
 
 ```C++
+int rob(vector<int>& nums) {
+    if (nums.size() == 0){
+        return 0;
+    }
+    if (nums.size() == 1){
+        return nums[0];
+    }
+    if (nums.size() == 2){
+        return max(nums[0],nums[1]);
+    }
+    int prev1 = nums[0], cur1 = nums[1]; // 1 house have robbed
+    int prev2 = nums[1], cur2 = nums[2]; // 1 house haven't robbed
+    for (int i = 2; i < nums.size() - 1; ++i) {
+        swap(cur1, prev1);
+        int tmp = cur1;
+        cur1 = max(cur1 + nums[i], prev1);
+        prev1 = max(prev1, tmp);
+
+        swap(cur2, prev2);
+        tmp = cur2;
+        cur2 = max(cur2 + nums[i + 1], prev2);
+        prev2 = max(prev2, tmp);
+    }
+    return max(max(cur1, prev1), max(cur2, prev2));
+}
 ```
 
-```C++
-```
+
 
 ```C++
 ```
