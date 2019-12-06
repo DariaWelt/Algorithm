@@ -1,15 +1,24 @@
 # Dynamic programming
++ [Knapsack problem](#knapsack-problem)
 + [Climbing Stairs](#climbing-stairs)
 + [Coin Change](#coin-change)
++ [Longest Increasing Subsequence](#longest-increasing-subsequence)
 + [Longest Common Subsequence](#longest-common-subsequence)
++ [Word Break](#word-break)
 + [Unique Paths](#unique-paths)
 + [Jump Game](#jump-game)
++ [Jump Game II](#jump-game-ii)
 + [House Robber](#house-robber)
 + [House Robber II](#house-robber-ii)
 + [Decode Ways](#decode-ways)
 + [Coin Change 2](#coin-change-2)
 + [N-Queens](#n-queens)
 + [N-Queens II](#n-queens-ii)
+
+## Knapsack problem
+https://stepik.org/lesson/13259/step/5?unit=3444
+```C++
+```
 
 ## Climbing Stairs
 https://leetcode.com/problems/climbing-stairs/
@@ -42,6 +51,10 @@ int coinChange(vector<int>& coins, int amount) {
     }
     return sum[amount] > amount ? -1 : sum[amount];
 }
+```
+## Longest Increasing Subsequence
+https://leetcode.com/problems/longest-increasing-subsequence/
+```C++
 ```
 
 ## Longest Common Subsequence
@@ -107,6 +120,10 @@ public:
     }
 };
 ```
+## Word Break
+https://leetcode.com/problems/word-break/
+```C++
+```
 
 ## Unique Paths
 https://leetcode.com/problems/unique-paths/
@@ -163,6 +180,25 @@ Space Complexity = O(1)
             possibPos = curPos;
     }
     return possibPos == 0;
+}
+```
+## Jump Game II
+https://leetcode.com/problems/jump-game-ii/
+```C++
+int jump(vector<int>& nums) {
+    if (nums.size() <= 1)
+        return 0;
+    int curPos = 0, maxPos = 0, nextMax = 0;
+    int count = 0;
+    while (maxPos < nums.size() - 1) {
+        ++count;
+        for (int i = curPos; i <= maxPos; ++i) {
+            nextMax = max(nextMax, i + nums[i]);
+        }
+        curPos = maxPos + 1;
+        maxPos = nextMax;
+    }
+    return count;
 }
 ```
 
