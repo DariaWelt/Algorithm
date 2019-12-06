@@ -6,7 +6,10 @@
 + [Jump Game](#jump-game)
 + [House Robber](#house-robber)
 + [House Robber II](#house-robber-ii)
++ [Decode Ways](#decode-ways)
++ [Coin Change 2](#coin-change-2)
 + [N-Queens](#n-queens)
++ [N-Queens II](#n-queens-ii)
 
 ## Climbing Stairs
 https://leetcode.com/problems/climbing-stairs/
@@ -215,6 +218,15 @@ int rob(vector<int>& nums) {
     return max(max(cur1, prev1), max(cur2, prev2));
 }
 ```
+## Decode Ways
+https://leetcode.com/problems/decode-ways/
+```C++
+```
+
+## Coin Change 2
+https://leetcode.com/problems/coin-change-2/
+```C++
+```
 
 ## N-Queens
 https://leetcode.com/problems/n-queens/
@@ -255,6 +267,35 @@ public:
 };
 ```
 
-
+## N-Queens II
+https://leetcode.com/problems/n-queens-ii/
 ```C++
+class Solution {
+private:
+    bool isvalid(int row, int col, vector<int>& diag1, vector<int>& diag2, vector<int>& columns) {
+        return !columns[col] && !diag1[row + col] && !diag2[row - col + columns.size() - 1];
+    }
+    void StandQ(int& result, int row, vector<int>& diag1, vector<int>& diag2, vector<int>& col) {
+        if (row == col.size()){
+            ++result;
+        } else {
+            for (int i = 0; i < col.size(); ++i) {
+                if (isvalid(row, i, diag1, diag2, col)) {
+                    diag1[row + i] = diag2[row - i + col.size() - 1] = col[i] = 1;
+                    StandQ(result, row + 1, diag1, diag2, col);
+                    diag1[row + i] = diag2[row - i + col.size() - 1] = col[i] = 0;
+                }
+            }
+        }
+    }
+public:
+    int totalNQueens(int n) {
+        int result = 0;
+        vector<int> diag1(2 * n,0);
+        vector<int> diag2(2 * n,0);
+        vector<int> columns(n,0);
+        StandQ(result, 0, diag1, diag2, columns);
+        return result;
+    }
+};
 ```
