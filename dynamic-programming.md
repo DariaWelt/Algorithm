@@ -153,37 +153,16 @@ https://leetcode.com/problems/unique-paths-ii/
 int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
     if (obstacleGrid.back().back() == 1 || obstacleGrid.front().front() == 1)
         return 0;
-    vector<long> curCol(obstacleGrid.size(),0), preCol(obstacleGrid.size(),0);
-    // initialize preCol (first column)
-    for(int i = 0; i < obstacleGrid.size(); ++i) {
-        if(obstacleGrid[i][0] == 1) {
-            break;
+    int m = obstacleGrid.size(), n = obstacleGrid[0].size();
+    vector<long> steps(n, 0);
+    steps[0] = 1;
+    for (int i = 0 ; i < m; i++){
+        steps[0] = obstacleGrid[i][0] ? 0 : steps[0];
+        for (int j = 1 ; j < n; j++) {
+            steps[j] = obstacleGrid[i][j] ? 0 : steps[j] + steps[j - 1];
         }
-        preCol[i] = 1;
     }
-    for (int i = 1; i < obstacleGrid[0].size(); ++i) {
-        bool obstacle = true;
-        //we cannot reach cell (step down) if we have an obstacle in first row
-        curCol[0] = obstacleGrid[0][i] == 1? 0 : preCol[0]; 
-        if (curCol[0]){
-            obstacle = false;
-        }
-        for (int j = 1; j < obstacleGrid.size(); ++j) {
-            if(obstacleGrid[j][i] == 1) {
-                curCol[j] = 0;
-            }
-            else {
-                curCol[j] = curCol[j-1] + preCol[j]; 
-                if(curCol[j]) {
-                    obstacle = false;
-                }
-            }
-        }
-        if(obstacle)
-            return 0; 
-        swap(preCol, curCol);
-    }
-    return preCol.back();
+    return steps[n - 1];    
 }
 ```
 
@@ -299,27 +278,15 @@ int rob(vector<int>& nums) {
 https://leetcode.com/problems/decode-ways/
 ```C++
 int numDecodings(string s) {
-    if (s.length() == 0 || s[0] == '0')
-            return 0;
-    int first = 1;
+    int first = 0;
     int second = 1;
-    for (int i = 1; i < s.length(); ++i) {
-        if (s[i] == '0') {
-            if (s[i-1] > '2' || s[i-1] == '0')
-                return 0;
-        }
-        if ((s[i-1] - '0') * 10 + (s[i] - '0') <= 26) {
-            swap(first, second);
-            if (s[i] == '0') {
-                first = 0;
-            }
-            else {
-                second += first;
-            }
-        }
-        else {
-            first = second;
-        }
+    for (int i = 0; i < s.length(); ++i) { 
+       if (s[i] == '0')
+           second = 0;
+       swap(first, second);
+       second += first;
+       if ((s[i] - '0') * 10 + (s[i + 1] - '0') > 26)
+          first = 0;
     }
     return second;
 }
