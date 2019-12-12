@@ -2,6 +2,8 @@
 + [Triple Sum](#triple-sum)
 + [Two Sum](#two-sum)
 + [Subarray Sum Equals K](#subarray-sum-equals-k)
++ [Maximum Subarray](#maximum-subarray)
++ [Maximum Product Subarray](#maximum-product-subarray)
 
 ## Two Sum
 https://leetcode.com/problems/two-sum/submissions/
@@ -131,4 +133,39 @@ public:
       return counter;
   }
 };
+```
+## Maximum Subarray
+https://leetcode.com/problems/maximum-subarray/
+
+```C++
+int maxSubArray(vector<int>& nums) {
+    if (nums.size() == 0)
+        return INT_MIN;
+    int memo, answ = memo = nums[0];
+    for (int i = 1; i < nums.size(); ++i) {
+        memo = max(memo + nums[i], nums[i]);
+        answ = max(answ, memo);
+    }
+    return answ;
+}
+```
+
+## Maximum Product Subarray
+https://leetcode.com/problems/maximum-product-subarray/
+
+```C++
+int maxProduct(vector<int>& nums) {
+    if (nums.size() == 0)
+        return 0;
+    int Min, answ;
+    int Max = answ = Min = nums[0];
+    for (int i = 1; i < nums.size(); ++i) {
+        if (nums[i] < 0)
+            swap(Max,Min);
+        Max = max(nums[i], nums[i]*Max);
+        Min = min(nums[i], nums[i]*Min);
+        answ = max(answ, Max);
+    }
+    return answ;
+}
 ```
