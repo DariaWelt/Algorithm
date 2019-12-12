@@ -55,6 +55,26 @@ int coinChange(vector<int>& coins, int amount) {
 ```
 ## Longest Increasing Subsequence
 https://leetcode.com/problems/longest-increasing-subsequence/
+Time Complexity O(n^2)
+Space Complexity O(n)
+```C++
+int lengthOfLIS(vector<int>& nums) {
+    if (nums.size() == 0)
+        return 0;
+    vector<int> LIS(nums.size(), 1);
+    int answ = 1;
+    for (int i = 1; i < nums.size(); ++i) {
+       for (int j = 0; j < i; ++j) {
+           if (nums[j] < nums[i]) {
+               LIS[i] = max(LIS[i], LIS[j] + 1);
+           }
+       }
+        answ = max(answ, LIS[i]);
+    }
+    return answ;
+}
+```
+
 ```C++
 ```
 
