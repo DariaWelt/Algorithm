@@ -33,6 +33,22 @@ int lengthOfLongestSubstring(string s) {
 https://leetcode.com/problems/longest-repeating-character-replacement/
 
 ```C++
+int characterReplacement(string s, int k) {
+    int start = 0, repeating = 0;
+    vector<int> count(('Z' - 'A' + 1), 0);
+    int res = 0;
+    for (int end = 0; end < s.size(); ++end) {
+        ++count[s[end] - 'A'];
+        repeating = max(repeating, count[s[end] - 'A']);
+        //window length
+        if ((end - start + 1) - repeating > k) {
+            count[s[start] - 'A']--;
+            ++start;
+        }
+        res = max(res, (end - start + 1));
+    }
+    return res;
+}
 ```
 
 ## Minimum Window Substring
@@ -168,6 +184,24 @@ bool isPalindrome(string s) {
 https://leetcode.com/problems/longest-palindromic-substring/
 
 ```C++
+string longestPalindrome(string s) {
+    int resStart = 0;
+    int max = 0;
+    for (int i = 0; i < s.size();) {
+        int start = i, end = i;
+        while (end + 1 < s.size() && s[end] == s[end + 1]) ++end;
+        i = end + 1;
+        while (start - 1 >= 0 && end + 1 < s.size() && s[start - 1] == s[end + 1]) {
+            --start;
+            ++end;
+        }
+        if (end - start + 1 > max) {
+            max = end - start + 1;
+            resStart = start;
+        }
+    }
+    return s.substr(resStart, max);
+}
 ```
 
 ## Palindromic Substrings
