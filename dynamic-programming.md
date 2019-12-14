@@ -19,6 +19,24 @@
 ## Knapsack problem
 https://stepik.org/lesson/13259/step/5?unit=3444
 ```C++
+#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+  int capacity, n, coin;
+  cin >> capacity >> n;
+  vector<vector<int>> maxValue(n + 1, vector<int>(capacity + 1,0));
+  for (int i = 1; i <= n; i++) {
+    cin >> coin;
+    for (int j = 1; j <= capacity; j++) {
+      maxValue[i][j] = maxValue[i - 1][j];
+      if (coin <= j)
+        maxValue[i][j] = max(maxValue[i - 1][j], maxValue[i - 1][j - coin] + coin);
+    }
+  }
+  cout << maxValue[n][capacity];
+  return 0;
+}
 ```
 
 ## Climbing Stairs
@@ -144,6 +162,35 @@ public:
 ## Word Break
 https://leetcode.com/problems/word-break/
 ```C++
+class Solution {
+private:
+    bool reqursion(string s, unordered_set<string>& wordSet, unordered_map<string, bool>& subStr) {
+        if (subStr.find(s) != subStr.end())
+            return subStr[s];
+        if (wordSet.find(s) != wordSet.end()){
+            subStr[s] = true;
+            return true;
+        }
+        for (int i = 0; i < s.size(); ++i) {
+            if (wordSet.find(s.substr(i)) == wordSet.end())
+                continue;
+            string sub = s.substr(0, i);
+            if (reqursion(sub, wordSet, subStr)) {
+                subStr[s] = true;
+                return true;
+            }
+        }
+        subStr[s] = false;
+        return false;
+    }
+
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+        unordered_map<string, bool> subStr;
+        return reqursion(s, wordSet, subStr);
+    }
+};
 ```
 
 ## Unique Paths
