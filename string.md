@@ -208,10 +208,40 @@ string longestPalindrome(string s) {
 https://leetcode.com/problems/palindromic-substrings/
 
 ```C++
+int countSubstrings(string s) {
+    int res = s.size();
+    vector<vector<bool>> pal(s.size(), vector<bool>(s.size(), true));
+    for (int len = 2; len <= s.size(); len++) {
+        for (int i = 0; i <= s.size() - len; i++) {
+            int j = i + len - 1;
+            pal[i][j] = (s[i] == s[j]) && ((len > 2) ? pal[i+1][j-1]:true);
+            if (pal[i][j]) res++; 
+        }
+    }
+    return res; 
+}
 ```
 
 ## Is Subsequence
 https://leetcode.com/problems/is-subsequence/
 
 ```C++
+bool isSubsequence(string s, string t) {
+    int left = 0;
+    int right = 0;
+    if(s.empty())
+        return true;
+    while(right<t.length()){
+        if(t[right]==s[left]){
+            left++;
+            if(left>=s.length()){
+                return true;
+            }
+            right++;
+        }
+        else
+            right++;
+    }
+    return false;
+}
 ```
